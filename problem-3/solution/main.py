@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from itertools import count
 import math
 import random
@@ -93,7 +93,7 @@ if is_ipython:
 plt.ion()
 episode_durations = []
 
-def plot_durations(show_result=False,): # plots durations
+def plot_durations(show_result=False,plot_to_png = False): # plots durations
     plt.figure(1)
     durations_t = torch.tensor(episode_durations, dtype=torch.float)
     if show_result:
@@ -110,10 +110,18 @@ def plot_durations(show_result=False,): # plots durations
         means = torch.cat((torch.zeros(139), means))
         plt.plot(means.numpy())
 
+    plt.text(0.05, 1.07, f'EPS_START: {EPS_START}', transform=plt.gca().transAxes,ha='center', fontsize=8)
+    plt.text(0.35, 1.07, f'EPS_END: {EPS_END}', transform=plt.gca().transAxes, ha='center',fontsize=8)
+    plt.text(0.65, 1.07, f'EPS_DECAY: {EPS_DECAY}', transform=plt.gca().transAxes, ha='center',fontsize=8)
+    plt.text(0.95, 1.07, f'LR: {LR}', transform=plt.gca().transAxes, ha='center',fontsize=8)
+
     plt.pause(0.001)  # pause a bit so that plots are updated
-    timestamp = datetime.now().strftime("%Y.%m.%d::%H:%M")
-    filename = f'plots/plot_{timestamp}.png'
-    plt.savefig(filename)
+    
+    if plot_to_png:
+        timestamp = datetime.now().strftime("%Y-%m-%d__%H-%M")
+        print(timestamp)
+        filename = f'solution/plots/{timestamp}.png'
+        plt.savefig(filename)
 
     if is_ipython:
         if not show_result:
@@ -146,7 +154,7 @@ memory = ReplayMemory(10000)
 
 steps_done = 0
 
-nb_episodes = 500
+nb_episodes = 1000
 reward = 0.0
 
 episode_min = 999
@@ -210,7 +218,10 @@ for episode in range(nb_episodes):
 
         if p.game_over():
             episode_durations.append(frame + 1)
-            plot_durations()
+            if episode == nb_episodes - 1: 
+                plot_durations(plot_to_png=True)
+            else:
+                plot_durations()
             break
 
     p.reset_game()
