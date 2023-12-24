@@ -26,7 +26,6 @@ class QRobot: # a not so naive bot that learns with q learning
         if self.given_trajectories == 1:
             if(self.trajectory_iterator < len(GIVEN_TRAJECTORIES_1)):
                 action =  GIVEN_TRAJECTORIES_1[self.trajectory_iterator]
-                print(action)
                 self.trajectory_iterator += 1
                 self.move_robot(action)
                 return action
