@@ -154,7 +154,7 @@ memory = ReplayMemory(10000)
 
 steps_done = 0
 
-nb_episodes = 1000
+nb_episodes = 10000
 reward = 0.0
 
 episode_min = 999
@@ -189,9 +189,9 @@ for episode in range(nb_episodes):
                 episode_avg = sum(episode_durations) / len(episode_durations)
                 offset_aggression = -0.5 * -5 # rate * (negative feedback) -> used to calculate ratio of offset to the feedback itself
                 reward_offset = max(min(((frame - episode_avg) / ((episode_max - episode_min) / 2)) * offset_aggression, 2.5), -2.5)
-                # reward_offset += passed_obstacles
+                # reward_offset += passed_obstacles # i do not think this is a good idea anymore
                 reward += reward_offset
-                passed_obstacles = 0 # resert passed obstacles
+                passed_obstacles = 0 # reset passed obstacles
                 print(reward)    
             next_state = None
         else:
